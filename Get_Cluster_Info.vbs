@@ -5,16 +5,16 @@ Dim ServerName                ' имя кластера 1С:Предприяти
 Dim ClusterAdmin            ' Имя админа кластера, если есть
 Dim ClusterAdminPassword    ' Пароль админа кластера, если есть.
 
-ServerName = "netbiosname"
-ClusterAdmin = "123"
-ClusterAdminPassword = "321"
-const CLcount = 2 'колличество кластеров 1с на сервере. Можно будет переделать на UBound(Cluster) или Clusters. Не стал заморачиваться
+ServerName = "servername"
+ClusterAdmin = ""
+ClusterAdminPassword = ""
+const CLcount = 1 'колличество кластеров 1с на сервере. Можно будет переделать на UBound(Cluster) или Clusters. Не стал заморачиваться
 
 ' Зададим пути к рабочим файлам
-Const strBasesListFileName                 = "C:\zabbix2\scripts\Cluster1C\Bases_List.txt"
-Const strInformationBasesCountFileName     = "C:\zabbix2\scripts\Cluster1C\Information_Bases_Count.txt"
-Const strUsersCountFileName             = "C:\zabbix2\scripts\Cluster1C\Users_Count.txt"
-Const strWorkingProcessesCountFileName    = "C:\zabbix2\scripts\Cluster1C\Working_Processes_Count.txt"
+Const strBasesListFileName                 = "C:\zabbix\scripts\Cluster1C\Bases_List.txt"
+Const strInformationBasesCountFileName     = "C:\zabbix\scripts\Cluster1C\Information_Bases_Count.txt"
+Const strUsersCountFileName             = "C:\zabbix\scripts\Cluster1C\Users_Count.txt"
+Const strWorkingProcessesCountFileName    = "C:\zabbix\scripts\Cluster1C\Working_Processes_Count.txt"
 
 ' Опишем переменные
 Dim intInformationBasesCount            ' Количество информационных баз в кластере 1С
@@ -121,5 +121,6 @@ strBasesList = strBasesList & vbCrLf & "}"
 ' Записываем по файлам результаты работы
 WriteToFile strBasesListFileName, strBasesList
 WriteToFile strInformationBasesCountFileName, intInformationBasesCount
-WriteToFile strUsersCountFileName, realintUsersCount 
+'WriteToFile strUsersCountFileName, intUsersCount 'так было
+WriteToFile strUsersCountFileName, realintUsersCount 'так стало
 WriteToFile strWorkingProcessesCountFileName, intWorkingProcessesCount

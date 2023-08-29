@@ -2,8 +2,8 @@
 Param(
  [parameter()][alias("f")] $OutputFileName = "",
  [parameter()][alias("s")] $Server = [System.Net.Dns]::GetHostEntry([string]"localhost").HostName,
- [parameter()][alias("u")] $ClusterAdminName = "123",
- [parameter()][alias("p")] $ClusterAdminPass = "321",
+ [parameter()][alias("u")] $ClusterAdminName = "",
+ [parameter()][alias("p")] $ClusterAdminPass = "",
  [parameter()][alias("o")] $OutputFormat = "csv",
  [parameter()][alias("d")] $Delimeter = ",",
  [switch] $AppendTotal = $False
@@ -46,6 +46,18 @@ ForEach ($Cluster in $ServerAgent.GetClusters()) {
    "Sessions" = @()
   }
   ForEach ($Session in $ServerAgent.GetInfoBaseSessions($Cluster, $Base)) {
+	  
+	  if ($Session.License.ShortPresentation -like '*Лицензия 1*' -or $Session.License.ShortPresentation -like '*Лицензия 2*' -or $Session.License.ShortPresentation -like '*Лицензия 3*')
+		{
+		$CountServLic = 1 + $CountServLic
+		}
+
+		elseif ($Session.License.ShortPresentation -like "*Лицензия 4*" -or $Session.License.ShortPresentation -like "*Лицензия 5*")
+		{
+		$CountTSLic = 1 + $CountTSLic
+		}
+	  
+	  
    $CurrentSession = New-Object PSCustomObject -Property @{
     "Tag" = "Session"
     "userName" = $Session.userName
@@ -73,19 +85,6 @@ ForEach ($Cluster in $ServerAgent.GetClusters()) {
       "ShortPresentation" = $Session.License.ShortPresentation
 	     }
 	 $CurrentSession.Licenses += $CurrentLicense
-	
-		
-	if ($Session.License.ShortPresentation -like "*Номер первой серверной лицензии*" -or "*номер второй серверной лицензии*" -or "*номер третей серверной лицензии*")
-	  {
-		  $CountServLic += 1
-		  }
-		  else {
-				if ($Session.License.ShortPresentation -like "*Номер клиентской 1*" -or "*Номер клиентской 2*")
-				{
-				$CountTSLic += 1
-				}
-			}
-	 	 
 	 
     } catch {}
    }
@@ -95,5 +94,5 @@ ForEach ($Cluster in $ServerAgent.GetClusters()) {
  }
  $TotalList += $CurrentCluster
 }
-echo $CountServLic | Out-File -FilePath C:\zabbix2\scripts\Cluster1C\LicensesServCount.txt
-echo $CountTSLic | Out-File -FilePath C:\zabbix2\scripts\Cluster1C\LicensesTSCount.txt
+echo $CountServLic | Out-File -FilePath C:\zabbix\scripts\Cluster1C\LicensesServCount.txt
+echo $CountTSLic | Out-File -FilePath C:\zabbix\scripts\Cluster1C\LicensesTSCount.txt
